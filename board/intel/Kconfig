@@ -51,11 +51,17 @@ config TARGET_MINNOWMAX
 	  Note that PCIE_ECAM_BASE is set up by the FSP so the value used
 	  by U-Boot matches that value.
 
+config TARGET_SOM_6867
+	bool "SOM 6867"
+	help
+	  Advantech SOM-6867
+
 endchoice
 
 source "board/intel/bayleybay/Kconfig"
 source "board/intel/crownbay/Kconfig"
 source "board/intel/galileo/Kconfig"
 source "board/intel/minnowmax/Kconfig"
+source "board/intel/som-6867/Kconfig"
 
 endif
