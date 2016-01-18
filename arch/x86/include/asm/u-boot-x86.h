@@ -46,6 +46,7 @@ int default_print_cpuinfo(void);
 
 /* Set up a UART which can be used with printch(), printhex8(), etc. */
 int setup_early_uart(void);
+int disable_uart(void);
 
 void setup_pcat_compatibility(void);
 

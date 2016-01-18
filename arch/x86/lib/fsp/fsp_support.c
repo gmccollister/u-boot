@@ -93,6 +93,9 @@ void fsp_continue(u32 status, void *hob_list)
 
 	assert(status == 0);
 
+	/*FIXME - Only disable on the SOM-6867 */
+	disable_uart();
+
 	/* The boot loader main function entry */
 	fsp_init_done(hob_list);
 }

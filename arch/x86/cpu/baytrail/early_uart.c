@@ -76,3 +76,12 @@ int setup_early_uart(void)
 
 	return 0;
 }
+
+int disable_uart(void)
+{
+	/* Disable the legacy UART hardware. */
+	x86_pci_write_config32(PCI_DEV_CONFIG(0, LPC_DEV, LPC_FUNC), UART_CONT,
+			       0);
+
+	return 0;
+}
