@@ -27,6 +27,48 @@
 		silent_console = <0>;
 	};
 
+	pch_pinctrl {
+		compatible = "intel,x86-pinctrl";
+		io-base = <0x4c>;
+
+		/* HDA_RSTB */
+		soc_gpio_s0_8@0 {
+			gpio-offset = <0x0 8>;
+			pad-offset = <0x220>;
+			mode-func = <2>;
+		};
+
+		/* HDA_SYNC */
+		soc_gpio_s0_9@0 {
+			gpio-offset = <0x0 9>;
+			pad-offset = <0x250>;
+			mode-func = <2>;
+			pull-assign = <1>;
+		};
+
+		/* HDA_CLK */
+		soc_gpio_s0_10@0 {
+			gpio-offset = <0x0 10>;
+			pad-offset = <0x240>;
+			mode-func = <2>;
+		};
+
+		/* HDA_SDO */
+		soc_gpio_s0_11@0 {
+			gpio-offset = <0x0 11>;
+			pad-offset = <0x260>;
+			mode-func = <2>;
+			pull-assign = <1>;
+		};
+
+		/* HDA_SDI0 */
+		soc_gpio_s0_12@0 {
+			gpio-offset = <0x0 12>;
+			pad-offset = <0x270>;
+			mode-func = <2>;
+		};
+	};
+
 	gpioa {
 		compatible = "intel,ich6-gpio";
 		u-boot,dm-pre-reloc;
@@ -191,7 +233,7 @@
 		fsp,enable-spi;
 		fsp,enable-sata;
 		fsp,sata-mode = <1>;
-		fsp,enable-lpe;
+		fsp,enable-azalia;
 		fsp,lpss-sio-enable-pci-mode;
 		fsp,enable-dma0;
 		fsp,enable-dma1;
@@ -212,6 +254,8 @@
 		fsp,emmc45-ddr50-enabled;
 		fsp,emmc45-retune-timer-value = <8>;
 		fsp,enable-igd;
+		fsp,serial-debug-port-address = <0x3f8>;
+		fsp,serial-debug-port-type = <1>;
 	};
 
 	spi {
