@@ -15,6 +15,7 @@
 #include <asm/io.h>
 #include <asm/lapic.h>
 #include <asm/tables.h>
+#include <asm/arch/global_nvs.h>
 
 /*
  * IASL compiles the dsdt entries and writes the hex values
@@ -336,6 +337,7 @@ u32 write_acpi_tables(u32 start)
 	struct acpi_fadt *fadt;
 	struct acpi_mcfg *mcfg;
 	struct acpi_madt *madt;
+	int i;
 
 	current = start;
 
@@ -381,6 +383,25 @@ u32 write_acpi_tables(u32 start)
 	       (char *)&AmlCode + sizeof(struct acpi_table_header),
 	       dsdt->length - sizeof(struct acpi_table_header));
 	current += dsdt->length - sizeof(struct acpi_table_header);
+	current = ALIGN(current, 16);
+
+	/* Pack GNVS into the ACPI table area */
+	for (i = 0; i < dsdt->length; i++) {
+		u32 gnvs = (u32)dsdt + i;
+		if (*(u32 *)gnvs == 0xdeadbeef) {
+			debug("Fix up global NVS in DSDT to 0x%08x\n", current);
+			*(u32 *)gnvs = current;
+			break;
+		}
+	}
+
+	/* Update DSDT checksum since we patched the GNVS address */
+	dsdt->checksum = 0;
+	dsdt->checksum = table_compute_checksum((void *)dsdt, dsdt->length);
+
+	/* Fill in platform-specific global NVS variables */
+	acpi_create_gnvs((struct acpi_global_nvs *)current);
+	current += sizeof(struct acpi_global_nvs);
 	current = ALIGN(current, 16);
 
 	debug("ACPI:    * FADT\n");
